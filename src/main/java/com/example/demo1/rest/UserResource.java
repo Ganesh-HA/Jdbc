@@ -1,25 +1,45 @@
 package com.example.demo1.rest;
 
+
 import com.example.demo1.domain.User;
-import com.example.demo1.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo1.service.impl.UserServiceImpl;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class UserResource {
 
-    private UserService userService;
+    private UserServiceImpl userService;
 
-    public UserResource(UserService userService) {
+    public UserResource(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/getAll")
-    public List<User> getAll() {
+    @GetMapping("/users")
+    public List<User> getUsers(){
         return userService.getUsers();
     }
+
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable("id") Integer id) {
+        return userService.getUserById(id);
+    }
+    @PostMapping("/users")
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
+    }
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable("id") Integer id){
+        userService.deleteUser(id);
+    }
+    @PutMapping("/users/{id}")
+    public User updateUser(@PathVariable("id") Integer id,@RequestBody User user){
+        return userService.updateUser(id,user);
+    }
 }
+
